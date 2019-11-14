@@ -6,7 +6,7 @@
 /*   By: cauranus <cauranus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 16:13:34 by cauranus          #+#    #+#             */
-/*   Updated: 2019/11/14 14:14:36 by cauranus         ###   ########.fr       */
+/*   Updated: 2019/11/14 19:45:27 by cauranus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,9 @@ int	controls(int key, void *fdf1)
 	t_fdf *fdf;
 	
 	fdf = (t_fdf *)fdf1;
+	fdf->camera->iso = 0;
+	fdf->camera->zoomb = 0;
+	fdf->camera->move = 0;
 	if (key == MAIN_PAD_ESC)
 	{
 		(void)fdf;
@@ -96,51 +99,73 @@ int	controls(int key, void *fdf1)
 	}
 	if (key == NUM_PAD_6)
 	{
-		fdf->camera->posx += 10;
+		fdf->camera->move = 1;
+		fdf->camera->posx += 20;
 		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
 		draw(fdf->map, fdf);
 	}
 	if (key == NUM_PAD_8)
 	{
+		fdf->camera->move = 1;
 		fdf->camera->posy -= 10;
 		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
 		draw(fdf->map, fdf);
 	}
 	if (key == NUM_PAD_4)
 	{
-		fdf->camera->posx -= 10;
+		fdf->camera->move = 1;
+		fdf->camera->posx -= 20;
 		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
 		draw(fdf->map, fdf);
 	}
 	if (key == NUM_PAD_2)
 	{
+		fdf->camera->move = 1;
 		fdf->camera->posy += 10;
 		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
 		draw(fdf->map, fdf);
 	}
 	if (key == NUM_PAD_PLUS)
 	{
-		fdf->camera->zoom += 0.3;
+		fdf->camera->zoomb = 1;
+		fdf->camera->zoom += 0.8;
 		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
 		draw(fdf->map, fdf);
 	}
 	if (key == NUM_PAD_MINUS)
 	{
-		fdf->camera->zoom -= 0.3;
+		fdf->camera->zoomb = 1;
+		fdf->camera->zoom -= 0.8;
 		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
 		draw(fdf->map, fdf);
 	}
-	if (key == NUM_PAD_7)
+	if (key == ARROW_RIGHT)
 	{
-		fdf->camera->anglex += 0.05;
-		fdf->camera->angley -= 0.05;
+		fdf->camera->b += 0.05;
 		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
 		draw(fdf->map, fdf);
 	}
-	if (key == NUM_PAD_1)
+	if (key == ARROW_DOWN)
 	{
-		fdf->camera->angley -= 0.05;
-		fdf->camera->anglex -= 0.05;
+		fdf->camera->a += 0.05;
+		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
+		draw(fdf->map, fdf);
+	}
+	if (key == ARROW_LEFT)
+	{
+		fdf->camera->b -= 0.05;
+		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
+		draw(fdf->map, fdf);
+	}
+	if (key == ARROW_UP)
+	{
+		fdf->camera->a -= 0.05;
+		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
+		draw(fdf->map, fdf);
+	}
+	if (key == NUM_PAD_0)
+	{
+		fdf->camera->iso = 1;
 		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
 		draw(fdf->map, fdf);
 	}
@@ -153,17 +178,20 @@ int main(int ac, char **av)
 
 	fdf = malloc(sizeof(t_fdf));
 	fdf->camera = malloc(sizeof(t_camera));
+	fdf->map = malloc(sizeof(t_map));
 	fdf->camera->posx = 300;
 	fdf->camera->posy = 150;
-	fdf->map = malloc(sizeof(t_map));
+	fdf->camera->zoom = 7;
+	fdf->camera->a = 60;
+	fdf->camera->b = 60;
+	fdf->camera->c = 60;
+	fdf->camera->iso = 0;
+	fdf->camera->zoomb = 1;
+	fdf->camera->move = 1;
 	fdf->mlx_ptr = mlx_init();
 	*fdf->map = get_map(av);
 	fdf->win_ptr = mlx_new_window(fdf->mlx_ptr, 1500, 1500, "mlx_test");
-	//mlx_hook(fdf->win_ptr, 2, 0, controls, fdf);
 	mlx_key_hook(fdf->win_ptr, controls, fdf);
-	fdf->camera->zoom = 70;
-	fdf->camera->anglex = 0.8;
-	fdf->camera->angley = 0.8;
 	draw(fdf->map, fdf);
 	mlx_loop(fdf->mlx_ptr);
 	return (0);

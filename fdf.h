@@ -6,7 +6,7 @@
 /*   By: cauranus <cauranus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 19:04:17 by cauranus          #+#    #+#             */
-/*   Updated: 2019/11/14 14:09:54 by cauranus         ###   ########.fr       */
+/*   Updated: 2019/11/14 20:31:05 by cauranus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,10 @@
 # define NUM_PAD_PLUS		69
 # define NUM_PAD_MINUS		78
 # define MAIN_PAD_ESC		53
+# define ARROW_UP			126
+# define ARROW_DOWN			125
+# define ARROW_LEFT			123
+# define ARROW_RIGHT		124
 #include <stdio.h>
 #include <mlx.h>
 #include <math.h>
@@ -43,16 +47,21 @@ typedef struct			s_point
 {
 	float				x;
 	float				y;
-	int					z;
+	float				z;
+	int					h;
 }						t_point;
 
 typedef struct 			s_camera
 {
 	float				zoom;
+	int					zoomb;
+	int					iso;
+	int					move;
 	int					posx;
 	int					posy;
-	float				anglex;
-	float				angley;
+	double				a;
+	double				b;
+	double				c;
 }						t_camera;
 
 
@@ -70,7 +79,7 @@ typedef	struct 			s_fdf
 }						t_fdf;
 
 int		ft_abs(int a);
-t_point	init_point(int x, int y, t_map *map_stat, t_fdf *fdf);
+t_point	*init_point(int x, int y, t_map *map_stat);
 void	draw_line(t_fdf *fdf, t_point start, t_point finish);
 void	draw(t_map *map_stat, t_fdf *fdf);
 
